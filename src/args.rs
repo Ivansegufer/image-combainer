@@ -1,17 +1,16 @@
-use std::env::{args, Args};
-
-pub fn get_nth_arg(n: usize) -> String {
-    let mut arguments: Args = args();
-    let argument = arguments.nth(n);
-
-    match argument {
-        None => String::from(""),
-        Some(value) => value,
-    }
+#[derive(Debug)]
+pub struct Arguments {
+    pub first_image: String,
+    pub second_image: String,
+    pub output: String,
 }
 
-pub struct Arguments {
-    first_image: String,
-    second_image: String,
-    output: String,
+impl Arguments {
+    pub fn new() -> Self {
+        Arguments {
+            first_image: String::new(),
+            second_image: String::new(),
+            output: String::new(),
+        }
+    }
 }
