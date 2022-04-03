@@ -1,6 +1,6 @@
 use std::env::{args, Args};
 
-fn get_nth_arg(n: usize) -> String {
+pub fn get_nth_arg(n: usize) -> String {
     let mut arguments: Args = args();
     let argument = arguments.nth(n);
 
@@ -8,4 +8,10 @@ fn get_nth_arg(n: usize) -> String {
         None => String::from(""),
         Some(value) => value,
     }
+}
+
+pub struct Arguments {
+    first_image: String,
+    second_image: String,
+    output: String,
 }
