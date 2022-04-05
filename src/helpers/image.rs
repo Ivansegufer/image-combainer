@@ -1,10 +1,21 @@
 use image::{imageops::Triangle, io::Reader, DynamicImage, GenericImageView, ImageFormat};
 
-pub fn find_image_from_path(path: String) -> (DynamicImage, ImageFormat) {
-    let image_reader = Reader::open(path).expect("Can't find image");
-    let image_format = image_reader.format().unwrap();
-    let image = image_reader.decode().unwrap();
-    (image, image_format)
+use crate::enums::image::ImageDataErrors;
+
+pub fn find_image_from_path(path: String) -> Result<(DynamicImage, ImageFormat), ImageDataErrors> {
+    match Reader::open::<&String>(&path) {
+        Ok(image_reader) => {
+            if let Some(image_format) = image_reader.format() {
+                match image_reader.decode() {
+                    Ok(image) => Ok((image, image_format)),
+                    Err(e) => Err(ImageDataErrors::UnableToDecodeImage(e)),
+                }
+            } else {
+                return Err(ImageDataErrors::UnableToFormatImage(path));
+            }
+        }
+        Err(e) => Err(ImageDataErrors::UnableToReadImageFromPath(e)),
+    }
 }
 
 fn get_smallest_dimension(dim_1: (u32, u32), dim_2: (u32, u32)) -> (u32, u32) {
